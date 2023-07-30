@@ -2,6 +2,12 @@
 #include <GLFW/glfw3.h>	// Then this one
 #include <iostream>
 
+#define ASSERT(x) if(!(x)) __debugbreak();
+#define GLCall(x) GLClearErrors(); x; ASSERT(GLLogCall(#x, __FILE__, __LINE__));
+
+void GLClearErrors();
+bool GLLogCall(const char* function, const char* file, int line);
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
@@ -11,13 +17,13 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // Switch to Core profile instead of Immediate mode
 
-
 	GLFWwindow* window = glfwCreateWindow(1600, 900, "Test Window", NULL, NULL); // Create a window
 	if (window == NULL) { // If failed, log and terminate GLFW
 		std::cout << "Failed to create a window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
+
 	glfwMakeContextCurrent(window); // Make the context current window
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {	// Check if the GLAD/GLFW initialisation worked
@@ -25,8 +31,8 @@ int main() {
 		return -1;
 	}
 
-	glViewport(0, 0, 1600, 900);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	GLCall(glViewport(0, 0, 1600, 900));
+	GLCall(glfwSetFramebufferSizeCallback(window, framebuffer_size_callback));
 
 
 	// Render loop
@@ -35,12 +41,12 @@ int main() {
 		processInput(window);
 
 		// Render instructions
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
 		// Check and call events and swap the buffers
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		GLCall(glfwSwapBuffers(window));
+		GLCall(glfwPollEvents());
 	}
 
 	glfwTerminate();
@@ -48,11 +54,24 @@ int main() {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	glViewport(0, 0, width, height);
+	GLCall(glViewport(0, 0, width, height));
 }
 
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, true);
+		GLCall(glfwSetWindowShouldClose(window, true));
 	}
+}
+
+
+void GLClearErrors() {
+	//while (glGetError() != GL_NO_ERROR);
+}
+
+bool GLLogCall(const char* function, const char* file, int line) {
+	while (GLenum error = glGetError()) {
+		std::cout << "[OpenGL]: (" << error << "): " << function << "\nfile: " << file << "\nline: " << line << std::endl;
+		return false;
+	}
+	return true;
 }
