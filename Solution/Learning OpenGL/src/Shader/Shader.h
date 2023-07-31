@@ -22,9 +22,10 @@ public:
 
 	void Bind();
 
-	void SetBool(const std::string &name, bool value);
-	void SetInt(const std::string &name, int value);
-	void SetFloat(const std::string &name, float value);
+	void SetBool(const std::string &name, bool v0);
+	void SetInt(const std::string &name, int v0);
+	void SetFloat(const std::string &name, float v0);
+	void Set4f(const std::string &name, float v0, float v1, float v2, float v3);
 
 private:
 	std::string ReadShader(const char* shaderPath);

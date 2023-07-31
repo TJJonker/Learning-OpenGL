@@ -22,19 +22,24 @@ void Shader::Bind()
 	GLCall(glUseProgram(m_ID));
 }
 
-void Shader::SetBool(const std::string& name, bool value)
+void Shader::SetBool(const std::string& name, bool v0)
 {
-	GLCall(glUniform1i(GetUniformLocation(name), (int)value));
+	GLCall(glUniform1i(GetUniformLocation(name), (int)v0));
 }
 
-void Shader::SetInt(const std::string& name, int value)
+void Shader::SetInt(const std::string& name, int v0)
 {
-	GLCall(glUniform1i(GetUniformLocation(name), value));
+	GLCall(glUniform1i(GetUniformLocation(name), v0));
 }
 
-void Shader::SetFloat(const std::string& name, float value)
+void Shader::SetFloat(const std::string& name, float v0)
 {
-	GLCall(glUniform1f(GetUniformLocation(name), value));
+	GLCall(glUniform1f(GetUniformLocation(name), v0));
+}
+
+void Shader::Set4f(const std::string& name, float v0, float v1, float v2, float v3)
+{
+	GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
 
 std::string Shader::ReadShader(const char* shaderPath)

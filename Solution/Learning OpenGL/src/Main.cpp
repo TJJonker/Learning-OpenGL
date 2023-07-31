@@ -34,15 +34,13 @@ int main() {
 
 
 	float vertices[] = {
-		-0.5f,  0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
+		0, 1, 2
 	};
 
 	unsigned int vao;	// Vertex Array Objects -> Keeps track of all
@@ -59,10 +57,13 @@ int main() {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
 	GLCall(glEnableVertexAttribArray(0));
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
+	GLCall(glEnableVertexAttribArray(1));
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	Shader shader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 
@@ -75,8 +76,9 @@ int main() {
 		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-		GLCall(glBindVertexArray(vao));
 		shader.Bind();
+
+		GLCall(glBindVertexArray(vao));
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
 		GLCall(glBindVertexArray(0)) // Unbind vao
