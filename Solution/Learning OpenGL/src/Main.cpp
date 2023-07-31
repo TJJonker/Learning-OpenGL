@@ -2,11 +2,11 @@
 #include <GLFW/glfw3.h>	// Then this one
 #include <iostream>
 #include "Debugging/debugger.h"
+#include "Shader/Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-void CheckAndLogShaderErrors(unsigned int shader);
-void CheckAndLogProgramErrors(unsigned int program);
+
 
 int main() {
 	glfwInit(); // Initialize glfw
@@ -64,47 +64,7 @@ int main() {
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-
-#pragma region Shaders
-	const char* vertexShaderSource = "#version 330 core\n"
-		"layout (location = 0) in vec3 aPos;\n"
-		"void main()\n"
-		"{\n"
-		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-		"}\0";
-
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	GLCall(glShaderSource(vertexShader, 1, &vertexShaderSource, NULL));
-	GLCall(glCompileShader(vertexShader));
-	CheckAndLogShaderErrors(vertexShader);
-
-	const char* fragmentShaderSource = "#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"void main()\n"
-		"{\n"
-		"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-		"}\0";
-
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	GLCall(glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL));
-	GLCall(glCompileShader(fragmentShader));
-	CheckAndLogShaderErrors(fragmentShader);
-
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	GLCall(glAttachShader(shaderProgram, vertexShader));
-	GLCall(glAttachShader(shaderProgram, fragmentShader));
-	GLCall(glLinkProgram(shaderProgram));
-	CheckAndLogProgramErrors(shaderProgram);
-	GLCall(glUseProgram(shaderProgram));
-
-	GLCall(glDeleteShader(vertexShader));
-	GLCall(glDeleteShader(fragmentShader));
-#pragma endregion
-	
-
+	Shader shader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 
 	// Render loop
 	while (!glfwWindowShouldClose(window)) {
@@ -115,8 +75,8 @@ int main() {
 		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-		GLCall(glUseProgram(shaderProgram));
 		GLCall(glBindVertexArray(vao));
+		shader.Bind();
 		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
 		GLCall(glBindVertexArray(0)) // Unbind vao
@@ -140,23 +100,4 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
-void CheckAndLogShaderErrors(unsigned int shader) {
-	int success;
-	char infoLog[512];
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-	if (!success) {
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "[SHADER COMPILE ERROR]: " << infoLog << std::endl;
-	}
-}
-
-void CheckAndLogProgramErrors(unsigned int program) {
-	int success;
-	char infoLog[512];
-
-	glGetProgramiv(program, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(program, 512, NULL, infoLog);
-	}
-}
