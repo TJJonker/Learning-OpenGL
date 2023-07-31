@@ -1,12 +1,7 @@
 #include <glad/glad.h>	// Include this file first
 #include <GLFW/glfw3.h>	// Then this one
 #include <iostream>
-
-#define ASSERT(x) if(!(x)) __debugbreak();
-#define GLCall(x) GLClearErrors(); x; ASSERT(GLLogCall(#x, __FILE__, __LINE__));
-
-void GLClearErrors();
-bool GLLogCall(const char* function, const char* file, int line);
+#include "Debugging/debugger.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -61,17 +56,4 @@ void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		GLCall(glfwSetWindowShouldClose(window, true));
 	}
-}
-
-
-void GLClearErrors() {
-	//while (glGetError() != GL_NO_ERROR);
-}
-
-bool GLLogCall(const char* function, const char* file, int line) {
-	while (GLenum error = glGetError()) {
-		std::cout << "[OpenGL]: (" << error << "): " << function << "\nfile: " << file << "\nline: " << line << std::endl;
-		return false;
-	}
-	return true;
 }
