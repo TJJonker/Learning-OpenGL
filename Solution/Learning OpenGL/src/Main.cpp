@@ -31,17 +31,41 @@ int main() {
 	GLCall(glViewport(0, 0, 1600, 900));
 	GLCall(glfwSetFramebufferSizeCallback(window, framebuffer_size_callback));
 
+
+
 	float vertices[] = {
+		-0.5f,  0.5f, 0.0f,
 		-0.5f, -0.5f, 0.0f,
 		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f,
+		 0.5f,  0.5f, 0.0f,
 	};
 
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	unsigned int vao;	// Vertex Array Objects -> Keeps track of all
+	GLCall(glGenVertexArrays(1, &vao));
+	GLCall(glBindVertexArray(vao));
+
 	unsigned int VBO;
-	GLCall(glGenBuffers(1, &VBO)); // Vertex Buffer Object
+	GLCall(glGenBuffers(1, &VBO)); // Vertex Buffer Object -> Keeps track of vertices
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
 
+	unsigned int ebo;
+	GLCall(glGenBuffers(1, &ebo));	// Element Buffer Object -> Keeps track of indeces
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+	GLCall(glEnableVertexAttribArray(0));
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+
+#pragma region Shaders
 	const char* vertexShaderSource = "#version 330 core\n"
 		"layout (location = 0) in vec3 aPos;\n"
 		"void main()\n"
@@ -74,10 +98,13 @@ int main() {
 	GLCall(glAttachShader(shaderProgram, fragmentShader));
 	GLCall(glLinkProgram(shaderProgram));
 	CheckAndLogProgramErrors(shaderProgram);
-	glUseProgram(shaderProgram);
+	GLCall(glUseProgram(shaderProgram));
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	GLCall(glDeleteShader(vertexShader));
+	GLCall(glDeleteShader(fragmentShader));
+#pragma endregion
+	
+
 
 	// Render loop
 	while (!glfwWindowShouldClose(window)) {
@@ -87,6 +114,12 @@ int main() {
 		// Render instructions
 		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+
+		GLCall(glUseProgram(shaderProgram));
+		GLCall(glBindVertexArray(vao));
+		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+
+		GLCall(glBindVertexArray(0)) // Unbind vao
 
 		// Check and call events and swap the buffers
 		GLCall(glfwSwapBuffers(window));
