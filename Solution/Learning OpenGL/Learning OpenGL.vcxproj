@@ -149,14 +149,20 @@
     <ClCompile Include="src\Debugging\debugger.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
+    <ClCompile Include="src\vendor\stb_lib\stb_lib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debugging\debugger.h" />
     <ClInclude Include="src\Shader\Shader.h" />
+    <ClInclude Include="src\vendor\stb_lib\stb_lib.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\fragmentShader.glsl" />
     <None Include="src\shaders\vertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\textures\container.jpg" />
+    <Image Include="src\textures\texture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
