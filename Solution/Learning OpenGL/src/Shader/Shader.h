@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <string>
 #include <fstream>
@@ -26,6 +27,7 @@ public:
 	void SetInt(const std::string& name, int v0);
 	void SetFloat(const std::string& name, float v0);
 	void Set4f(const std::string& name, float v0, float v1, float v2, float v3);
+	void SetMatrix4(const std::string& name, glm::mat4& v0);
 
 private:
 	std::string ReadShader(const char* shaderPath);

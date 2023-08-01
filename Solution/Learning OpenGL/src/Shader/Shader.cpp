@@ -1,6 +1,7 @@
 #include "Shader.h"
 
 
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	unsigned int vertexShader = CompileShader(ReadShader(vertexPath).c_str(), GL_VERTEX_SHADER);
@@ -41,6 +42,12 @@ void Shader::Set4f(const std::string& name, float v0, float v1, float v2, float 
 {
 	GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
+
+void Shader::SetMatrix4(const std::string& name, glm::mat4& v0)
+{
+	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(v0)));
+}
+
 
 std::string Shader::ReadShader(const char* shaderPath)
 {	
