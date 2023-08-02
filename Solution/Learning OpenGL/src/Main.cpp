@@ -11,6 +11,7 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 8.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -25,6 +26,8 @@ float pitch = 0.0f;
 float lastX = 500, lastY = 500;
 
 bool firstMouse = true;
+
+float fov = 45.0f;
 
 int main() {
 	glfwInit(); // Initialize glfw
@@ -49,6 +52,7 @@ int main() {
 	GLCall(glViewport(0, 0, 1000, 1000));
 	GLCall(glfwSetFramebufferSizeCallback(window, framebuffer_size_callback));
 	GLCall(glfwSetCursorPosCallback(window, mouse_callback));
+	GLCall(glfwSetScrollCallback(window, scroll_callback));
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -164,9 +168,7 @@ int main() {
 	shader.Bind();
 	shader.SetInt("texture1", 0);
 
-	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.0f), 1000.0f / 1000.0f, 0.1f, 100.0f);
-	shader.SetMatrix4("projection", projection);
+
 
 	GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -184,6 +186,10 @@ int main() {
 		// Render instructions
 		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(fov), 1000.0f / 1000.0f, 0.1f, 100.0f);
+		shader.SetMatrix4("projection", projection);
 
 		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		shader.SetMatrix4("view", view);
@@ -268,4 +274,13 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront = glm::normalize(direction);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	fov -= (float)yoffset;
+	if (fov < 1.0f)
+		fov = 1.0f;
+	if (fov > 45.0f)
+		fov = 45.0f;
 }
