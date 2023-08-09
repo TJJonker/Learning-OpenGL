@@ -29,6 +29,7 @@ bool firstMouse = true;
 
 float fov = 45.0f;
 
+
 int main() {
 	glfwInit(); // Initialize glfw
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // Set major and minor version so it matches version 3.3
