@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include <algorithm>
-#include "src/Utils/Time.h"
+#include "../Utils/Time.h"
 
 glm::mat4 Camera::GetView() const
 {

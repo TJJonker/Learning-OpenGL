@@ -147,7 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="include\glm\detail\glm.cpp" />
     <ClCompile Include="src\OpenGL Core\Renderer\Renderer.cpp" />
@@ -160,9 +160,10 @@
     <ClCompile Include="src\vendor\stb_lib\stb_lib.cpp" />
     <ClCompile Include="src\OpenGL Core\VertexArray\VertexArray.cpp" />
     <ClCompile Include="src\OpenGL Core\VertexBuffer\VertexBuffer.cpp" />
+    <ClCompile Include="src\OpenGL Core\Textures\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="include\glm\common.hpp" />
     <ClInclude Include="include\glm\detail\func_common.hpp" />
     <ClInclude Include="include\glm\detail\func_exponential.hpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="src\vendor\stb_lib\stb_lib.h" />
     <ClInclude Include="src\OpenGL Core\VertexArray\VertexArray.h" />
     <ClInclude Include="src\OpenGL Core\VertexBuffer\VertexBuffer.h" />
+    <ClInclude Include="src\OpenGL Core\Textures\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\glm\detail\func_common.inl" />

@@ -6,12 +6,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "../Camera.h"
 #include "Utils/Time.h"
 #include "OpenGL Core/VertexArray/VertexArray.h"
 #include "OpenGL Core/IndexBuffer/IndexBuffer.h"
 #include "OpenGL Core/Shader/Shader.h"
 #include "OpenGL Core/Renderer/Renderer.h"
+#include "Camera/Camera.h"
+#include "OpenGL Core/Textures/Texture.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -111,25 +112,7 @@ int main() {
 
 	IndexBuffer indexBuffer(indices, 36);
 	
-	unsigned int texture1;
-	GLCall(glGenTextures(1, &texture1));
-	GLCall(glBindTexture(GL_TEXTURE_2D, texture1));
-
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load("src/textures/boxTexture.png", &width, &height, &nrChannels, 0);
-	if (data) {
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
-		GLCall(glGenerateMipmap(GL_TEXTURE_2D));
-	}
-	else {
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
+	Texture texture("src/textures/boxTexture.png");
 
 	Shader shader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 
