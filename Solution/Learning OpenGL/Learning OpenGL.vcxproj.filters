@@ -526,8 +526,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\vertexShader.glsl" />
-    <None Include="src\shaders\fragmentShader.glsl" />
+    <None Include="src\shaders\vertexShaderLight.glsl" />
+    <None Include="src\shaders\fragmentShaderLighting.glsl" />
     <None Include="include\glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -861,6 +861,8 @@
     <None Include="include\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="src\shaders\fragmentShaderLight.glsl" />
+    <None Include="src\shaders\vertexShaderLighting.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\textures\texture.png">
