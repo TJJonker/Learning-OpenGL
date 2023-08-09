@@ -9,7 +9,7 @@
 #include <iostream>
 #include <map>
 
-#include "../Debugging/debugger.h"
+#include "../../Debugging/debugger.h"
 
 class Shader {
 public:
@@ -21,7 +21,8 @@ private:
 public:
 	Shader(const char* vertexPath, const char* fragmentPath);
 
-	void Bind();
+	void Bind() const;
+	void Unbind() const;
 
 	void SetBool(const std::string& name, bool v0);
 	void SetInt(const std::string& name, int v0);

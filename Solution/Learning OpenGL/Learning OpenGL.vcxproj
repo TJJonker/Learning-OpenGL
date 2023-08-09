@@ -150,11 +150,16 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="include\glm\detail\glm.cpp" />
+    <ClCompile Include="src\OpenGL Core\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\OpenGL Core\IndexBuffer\IndexBuffer.cpp" />
     <ClCompile Include="src\Debugging\debugger.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Shader\Shader.cpp" />
+    <ClCompile Include="src\OpenGL Core\VertexBufferLayout\VertexBufferLayout.h" />
+    <ClCompile Include="src\OpenGL Core\Shader\Shader.cpp" />
     <ClCompile Include="src\Utils\Time.cpp" />
     <ClCompile Include="src\vendor\stb_lib\stb_lib.cpp" />
+    <ClCompile Include="src\OpenGL Core\VertexArray\VertexArray.cpp" />
+    <ClCompile Include="src\OpenGL Core\VertexBuffer\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -302,10 +307,15 @@
     <ClInclude Include="include\glm\vec3.hpp" />
     <ClInclude Include="include\glm\vec4.hpp" />
     <ClInclude Include="include\glm\vector_relational.hpp" />
+    <ClInclude Include="src\OpenGL Core\Renderer\Renderer.h" />
+    <ClInclude Include="src\OpenGL Core\IndexBuffer\IndexBuffer.h" />
     <ClInclude Include="src\Debugging\debugger.h" />
-    <ClInclude Include="src\Shader\Shader.h" />
+    <ClInclude Include="src\OpenGL Core\VertexBufferLayout\VertexBufferLayoutElement.h" />
+    <ClInclude Include="src\OpenGL Core\Shader\Shader.h" />
     <ClInclude Include="src\Utils\Time.h" />
     <ClInclude Include="src\vendor\stb_lib\stb_lib.h" />
+    <ClInclude Include="src\OpenGL Core\VertexArray\VertexArray.h" />
+    <ClInclude Include="src\OpenGL Core\VertexBuffer\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\glm\detail\func_common.inl" />

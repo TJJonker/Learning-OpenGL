@@ -18,9 +18,14 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	GLCall(glDeleteShader(fragmentShader));
 }
 
-void Shader::Bind()
+void Shader::Bind() const
 {
 	GLCall(glUseProgram(m_ID));
+}
+
+void Shader::Unbind() const 
+{
+	GLCall(glUseProgram(0));
 }
 
 void Shader::SetBool(const std::string& name, bool v0)
