@@ -12,6 +12,11 @@ float Camera::GetFOV() const
 	return m_Fov;
 }
 
+glm::vec3 Camera::GetPosition() const
+{
+	return m_CameraPos;
+}
+
 void Camera::ScrollCamera(float yOffset)
 {
 	m_Fov -= yOffset;

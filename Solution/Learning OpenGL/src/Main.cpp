@@ -126,7 +126,7 @@ int main() {
 		VertexArray lightVertexArray;
 		lightVertexArray.AddBuffer(vertexBuffer, vertexBufferLayout);
 		Shader lightSourceShader("src/shaders/vertexShaderLight.glsl", "src/shaders/fragmentShaderLight.glsl");
-		glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+		glm::vec3 lightPos(0.0f, 0.5f, 2.0f);
 
 
 		GLCall(glEnable(GL_DEPTH_TEST));
@@ -140,15 +140,30 @@ int main() {
 			Time::Update();
 
 			// Render instructions
-			GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
+			GLCall(glClearColor(0.1f, 0.1f, 0.125f, 1.0f));
 			GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
+			glm::vec3 lightColor;
+			lightColor.x = sin(glfwGetTime() * 2.0f);
+			lightColor.y = sin(glfwGetTime() * 0.7f);
+			lightColor.z = sin(glfwGetTime() * 1.3f);
+
+			glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
 
 			shaderLit.Bind();
 
 			shaderLit.Set3f("lightPosition", lightPos);
-			shaderLit.Set3f("objectColor", 1.0f, 0.5f, 0.31f);
 			shaderLit.Set3f("lightColor", 1.0f, 1.0f, 1.0f);
+			shaderLit.Set3f("material.ambient", 1.0f, 0.5f, 0.31f);
+			shaderLit.Set3f("material.diffuse", 1.0f, 0.5f, 0.31f);
+			shaderLit.Set3f("material.specular", 0.5f, 0.5f, 0.5f);
+			shaderLit.SetFloat("material.shininess", 32.0f);
+			shaderLit.Set3f("light.ambient", ambientColor);
+			shaderLit.Set3f("light.diffuse", diffuseColor); 
+			shaderLit.Set3f("light.specular", 1.0f, 1.0f, 1.0f);
+			shaderLit.Set3f("light.position", lightPos);
+			shaderLit.Set3f("viewPosition", camera.GetPosition());
 
 			glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
 			glm::mat4 viewMatrix = camera.GetView();
