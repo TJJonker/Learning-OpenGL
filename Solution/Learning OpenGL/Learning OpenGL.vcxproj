@@ -439,6 +439,9 @@
   <ItemGroup>
     <Image Include="src\textures\boxTexture.png" />
     <Image Include="src\textures\container.jpg" />
+    <Image Include="src\textures\container.png" />
+    <Image Include="src\textures\container_specular.png" />
+    <Image Include="src\textures\lighting_maps_specular_color.png" />
     <Image Include="src\textures\texture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

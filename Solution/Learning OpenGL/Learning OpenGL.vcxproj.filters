@@ -874,5 +874,14 @@
     <Image Include="src\textures\boxTexture.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="src\textures\container.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\textures\container_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\textures\lighting_maps_specular_color.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

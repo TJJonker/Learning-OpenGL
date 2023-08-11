@@ -51,36 +51,38 @@ int main() {
 
 	{
 		float vertices[] = {
-			// positions         // normals
-			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			// positions			// normals				// texture coords
+			-0.5f, -0.5f, -0.5f,	0.0f,  0.0f, -1.0f,		0.0f, 0.0f,
+			 0.5f, -0.5f, -0.5f,	0.0f,  0.0f, -1.0f,		1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f,	0.0f,  0.0f, -1.0f,		1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f,	0.0f,  0.0f, -1.0f,		0.0f, 1.0f,
+			
+			-0.5f, -0.5f,  0.5f,	0.0f,  0.0f,  1.0f,		0.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f,	0.0f,  0.0f,  1.0f,		1.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f,	0.0f,  0.0f,  1.0f,		1.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f,	0.0f,  0.0f,  1.0f,		0.0f, 1.0f,
+			
+			-0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,		0.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,		1.0f, 0.0f,
+			-0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,		1.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,		0.0f, 1.0f,
+			
+			 0.5f,  0.5f,  0.5f,	1.0f,  0.0f,  0.0f,		0.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f,	1.0f,  0.0f,  0.0f,		1.0f, 0.0f,
+			 0.5f, -0.5f, -0.5f,	1.0f,  0.0f,  0.0f,		1.0f, 1.0f,
+			 0.5f, -0.5f,  0.5f,	1.0f,  0.0f,  0.0f,		0.0f, 1.0f,
+			
+			 0.5f, -0.5f, -0.5f,	0.0f, -1.0f,  0.0f,		0.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f,	0.0f, -1.0f,  0.0f,		1.0f, 0.0f,
+			-0.5f, -0.5f,  0.5f,	0.0f, -1.0f,  0.0f,		1.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f,	0.0f, -1.0f,  0.0f,		0.0f, 1.0f,
+			
+			 0.5f,  0.5f, -0.5f,	0.0f,  1.0f,  0.0f,		0.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f,	0.0f,  1.0f,  0.0f,		1.0f, 0.0f,
+			-0.5f,  0.5f,  0.5f,	0.0f,  1.0f,  0.0f,		1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f,	0.0f,  1.0f,  0.0f,		0.0f, 1.0f
 
-			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
 
-			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 		};
 
 		unsigned int indices[] = {
@@ -107,16 +109,23 @@ int main() {
 		///////// Lit object
 
 		VertexArray vertexArray;
-		VertexBuffer vertexBuffer(vertices, 144 * sizeof(float));
+		int verticesArrayLength = sizeof(vertices) / sizeof(float);
+		VertexBuffer vertexBuffer(vertices, verticesArrayLength * sizeof(float));
 		VertexBufferLayout vertexBufferLayout;
 
 		vertexBufferLayout.Push<float>(3);
 		vertexBufferLayout.Push<float>(3);
+		vertexBufferLayout.Push<float>(2);
 		vertexArray.AddBuffer(vertexBuffer, vertexBufferLayout);
 
 		IndexBuffer indexBuffer(indices, 36);
 
-		Texture texture("src/textures/boxTexture.png");
+		Texture diffuseMap("src/textures/container.png");
+		Texture specularMap("src/textures/container_specular.png");
+		glActiveTexture(GL_TEXTURE0);
+		diffuseMap.Bind();
+		glActiveTexture(GL_TEXTURE1);
+		specularMap.Bind();
 
 		Shader shaderLit("src/shaders/vertexShaderLighting.glsl", "src/shaders/fragmentShaderLighting.glsl");
 
@@ -156,11 +165,11 @@ int main() {
 			shaderLit.Set3f("lightPosition", lightPos);
 			shaderLit.Set3f("lightColor", 1.0f, 1.0f, 1.0f);
 			shaderLit.Set3f("material.ambient", 1.0f, 0.5f, 0.31f);
-			shaderLit.Set3f("material.diffuse", 1.0f, 0.5f, 0.31f);
-			shaderLit.Set3f("material.specular", 0.5f, 0.5f, 0.5f);
+			shaderLit.SetInt("material.diffuse", 0);
+			shaderLit.SetInt("material.specular", 1);
 			shaderLit.SetFloat("material.shininess", 32.0f);
-			shaderLit.Set3f("light.ambient", ambientColor);
-			shaderLit.Set3f("light.diffuse", diffuseColor); 
+			shaderLit.Set3f("light.ambient", 0.2f, 0.2f, 0.2f);
+			shaderLit.Set3f("light.diffuse", 0.5f, 0.5f, 0.5f); 
 			shaderLit.Set3f("light.specular", 1.0f, 1.0f, 1.0f);
 			shaderLit.Set3f("light.position", lightPos);
 			shaderLit.Set3f("viewPosition", camera.GetPosition());
