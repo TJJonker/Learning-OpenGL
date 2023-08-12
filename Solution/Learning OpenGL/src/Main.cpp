@@ -144,7 +144,7 @@ int main() {
 		VertexArray lightVertexArray;
 		lightVertexArray.AddBuffer(vertexBuffer, vertexBufferLayout);
 		Shader lightSourceShader("src/shaders/vertexShaderLight.glsl", "src/shaders/fragmentShaderLight.glsl");
-		glm::vec3 lightPos(0.0f, 0.5f, 2.0f);
+		glm::vec3 lightPos(0.0f, -5.5f, 2.0f);
 
 
 		GLCall(glEnable(GL_DEPTH_TEST));
@@ -178,7 +178,10 @@ int main() {
 			shaderLit.Set3f("light.ambient", 0.2f, 0.2f, 0.2f);
 			shaderLit.Set3f("light.diffuse", 0.5f, 0.5f, 0.5f); 
 			shaderLit.Set3f("light.specular", 1.0f, 1.0f, 1.0f);
-			shaderLit.Set3f("light.direction", lightPos);
+			shaderLit.Set3f("light.position", lightPos);
+			shaderLit.SetFloat("light.constant", 1.0f);
+			shaderLit.SetFloat("light.linear", 0.09f);
+			shaderLit.SetFloat("light.quadratic", 0.032f);
 			shaderLit.Set3f("viewPosition", camera.GetPosition());
 
 			glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
