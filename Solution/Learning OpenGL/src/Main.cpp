@@ -178,10 +178,10 @@ int main() {
 			shaderLit.Set3f("light.ambient", 0.2f, 0.2f, 0.2f);
 			shaderLit.Set3f("light.diffuse", 0.5f, 0.5f, 0.5f); 
 			shaderLit.Set3f("light.specular", 1.0f, 1.0f, 1.0f);
-			shaderLit.Set3f("light.position", lightPos);
-			shaderLit.SetFloat("light.constant", 1.0f);
-			shaderLit.SetFloat("light.linear", 0.09f);
-			shaderLit.SetFloat("light.quadratic", 0.032f);
+			shaderLit.Set3f("light.position", camera.GetPosition());
+			shaderLit.Set3f("light.direction", camera.GetCameraFront());
+			shaderLit.SetFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+			shaderLit.SetFloat("light.outerCutOff", glm::cos(glm::radians(15.0f)));
 			shaderLit.Set3f("viewPosition", camera.GetPosition());
 
 			glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);

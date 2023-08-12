@@ -23,6 +23,7 @@ public:
 	glm::mat4 GetView() const;
 	float GetFOV() const;
 	glm::vec3 GetPosition() const;
+	glm::vec3 GetCameraFront() const;
 
 	void ScrollCamera(float yOffset);
 	void LookCamera(const glm::vec2& position);
