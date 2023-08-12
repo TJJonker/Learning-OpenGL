@@ -105,6 +105,15 @@ int main() {
 			22, 23, 20
 		};
 
+		glm::vec3 positions[] = {
+			{0, 0, 0 },
+			{1, 2, 3},
+			{2, 3, 1},
+			{1, 1, .8},
+			{3, 3, .5},
+			{2.5, 2, 1.5}
+		};
+
 
 		///////// Lit object
 
@@ -162,8 +171,6 @@ int main() {
 
 			shaderLit.Bind();
 
-			shaderLit.Set3f("lightPosition", lightPos);
-			shaderLit.Set3f("lightColor", 1.0f, 1.0f, 1.0f);
 			shaderLit.Set3f("material.ambient", 1.0f, 0.5f, 0.31f);
 			shaderLit.SetInt("material.diffuse", 0);
 			shaderLit.SetInt("material.specular", 1);
@@ -171,7 +178,7 @@ int main() {
 			shaderLit.Set3f("light.ambient", 0.2f, 0.2f, 0.2f);
 			shaderLit.Set3f("light.diffuse", 0.5f, 0.5f, 0.5f); 
 			shaderLit.Set3f("light.specular", 1.0f, 1.0f, 1.0f);
-			shaderLit.Set3f("light.position", lightPos);
+			shaderLit.Set3f("light.direction", lightPos);
 			shaderLit.Set3f("viewPosition", camera.GetPosition());
 
 			glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
@@ -179,17 +186,21 @@ int main() {
 			shaderLit.SetMatrix4("projection", projection);
 			shaderLit.SetMatrix4("view", viewMatrix);
 
-			glm::mat4 model = glm::mat4(1.0f);
-			shaderLit.SetMatrix4("model", model);
+			for (unsigned int i = 0; i < 6; ++i) {
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, positions[i]);
+				float angle = 13 * i;
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+				shaderLit.SetMatrix4("model", model);
 
-			renderer.Draw(vertexArray, indexBuffer, shaderLit);
-
+				renderer.Draw(vertexArray, indexBuffer, shaderLit);
+			}
 
 
 			lightSourceShader.Bind();
 			lightSourceShader.SetMatrix4("projection", projection);
 			lightSourceShader.SetMatrix4("view", viewMatrix);
-			model = glm::mat4(1.0f);
+			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, lightPos);
 			model = glm::scale(model, glm::vec3(0.2f));
 			lightSourceShader.SetMatrix4("model", model);
