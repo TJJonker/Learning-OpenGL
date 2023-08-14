@@ -146,6 +146,13 @@ int main() {
 		Shader lightSourceShader("src/shaders/vertexShaderLight.glsl", "src/shaders/fragmentShaderLight.glsl");
 		glm::vec3 lightPos(0.0f, -5.5f, 2.0f);
 
+		glm::vec3 pointLightPositions[] = {
+			glm::vec3(0.7f,  0.2f,  2.0f),
+			glm::vec3(2.3f, -3.3f, -4.0f),
+			glm::vec3(-4.0f,  2.0f, -12.0f),
+			glm::vec3(0.0f,  0.0f, -3.0f)
+		};
+
 
 		GLCall(glEnable(GL_DEPTH_TEST));
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -161,27 +168,30 @@ int main() {
 			GLCall(glClearColor(0.1f, 0.1f, 0.125f, 1.0f));
 			GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-			glm::vec3 lightColor;
-			lightColor.x = sin(glfwGetTime() * 2.0f);
-			lightColor.y = sin(glfwGetTime() * 0.7f);
-			lightColor.z = sin(glfwGetTime() * 1.3f);
-
-			glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
-
 			shaderLit.Bind();
 
 			shaderLit.Set3f("material.ambient", 1.0f, 0.5f, 0.31f);
 			shaderLit.SetInt("material.diffuse", 0);
 			shaderLit.SetInt("material.specular", 1);
 			shaderLit.SetFloat("material.shininess", 32.0f);
-			shaderLit.Set3f("light.ambient", 0.2f, 0.2f, 0.2f);
-			shaderLit.Set3f("light.diffuse", 0.5f, 0.5f, 0.5f); 
-			shaderLit.Set3f("light.specular", 1.0f, 1.0f, 1.0f);
-			shaderLit.Set3f("light.position", camera.GetPosition());
-			shaderLit.Set3f("light.direction", camera.GetCameraFront());
-			shaderLit.SetFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-			shaderLit.SetFloat("light.outerCutOff", glm::cos(glm::radians(15.0f)));
+			
+			for (int i = 0; i < 4; ++i) {
+				std::ostringstream str;
+				str << "pointLights[" << i << "]";
+				shaderLit.Set3f(str.str() + ".position", pointLightPositions[i]);
+				shaderLit.SetFloat(str.str() + ".constant", 1.0);
+				shaderLit.SetFloat(str.str() + ".liinear", 0.09f);
+				shaderLit.SetFloat(str.str() + ".quadratic", 0.032f);
+				shaderLit.Set3f(str.str() + ".ambient", 0.2f, 0.2f, 0.2f);
+				shaderLit.Set3f(str.str() + ".diffuse", 0.5f, 0.5f, 0.5f);
+				shaderLit.Set3f(str.str() + ".specular", 1.0f, 1.0f, 1.0f);
+			}
+
+			shaderLit.Set3f("dirLight.direction", camera.GetCameraFront());
+			shaderLit.Set3f("dirLight.ambient", 0.2f, 0.2f, 0.2f);
+			shaderLit.Set3f("dirLight.diffuse", 0.5f, 0.5f, 0.5f); 
+			shaderLit.Set3f("dirLight.specular", 1.0f, 1.0f, 1.0f);
+
 			shaderLit.Set3f("viewPosition", camera.GetPosition());
 
 			glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
@@ -203,13 +213,13 @@ int main() {
 			lightSourceShader.Bind();
 			lightSourceShader.SetMatrix4("projection", projection);
 			lightSourceShader.SetMatrix4("view", viewMatrix);
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, lightPos);
-			model = glm::scale(model, glm::vec3(0.2f));
-			lightSourceShader.SetMatrix4("model", model);
-			renderer.Draw(lightVertexArray, indexBuffer, lightSourceShader);
-
-
+			for (int i = 0; i < 4; ++i) {
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, pointLightPositions[i]);
+				model = glm::scale(model, glm::vec3(0.2f));
+				lightSourceShader.SetMatrix4("model", model);
+				renderer.Draw(lightVertexArray, indexBuffer, lightSourceShader);
+			}
 
 			// Check and call events and swap the buffers
 			GLCall(glfwSwapBuffers(window));
