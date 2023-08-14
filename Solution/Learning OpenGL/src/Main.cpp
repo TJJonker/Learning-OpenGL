@@ -13,6 +13,7 @@
 #include "OpenGL Core/Renderer/Renderer.h"
 #include "Camera/Camera.h"
 #include "OpenGL Core/Textures/Texture.h"
+#include <ASSIMP/config.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -21,6 +22,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 Camera camera;
 Renderer renderer;
+
+struct Vertex {
+	glm::vec3 Position;
+	glm::vec3 Normal;
+	glm::vec3 TextureCoords;
+};
 
 int main() {
 	glfwInit(); // Initialize glfw
@@ -129,8 +136,8 @@ int main() {
 
 		IndexBuffer indexBuffer(indices, 36);
 
-		Texture diffuseMap("src/textures/container.png");
-		Texture specularMap("src/textures/container_specular.png");
+		Texture diffuseMap("src/textures/container.png", Texture::TextureType::PNG);
+		Texture specularMap("src/textures/container_specular.png", Texture::TextureType::PNG);
 		glActiveTexture(GL_TEXTURE0);
 		diffuseMap.Bind();
 		glActiveTexture(GL_TEXTURE1);
