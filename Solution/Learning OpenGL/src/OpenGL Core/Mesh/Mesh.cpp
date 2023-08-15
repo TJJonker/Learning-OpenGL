@@ -1,18 +1,15 @@
 #include "Mesh.h"
-#include "../VertexArray/VertexArray.h"
-#include "../IndexBuffer/IndexBuffer.h"
 
 Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures):
-	m_Vertices(vertices), m_Indices(indices), m_Textures(textures)
+	m_Vertices(vertices), m_Indices(indices), m_Textures(textures), m_VertexArray(), m_IndexBuffer(m_Indices.data(), m_Indices.size())
 {
-	SetupMesh();
-}
+	VertexBuffer vertexBuffer(m_Vertices.data(), m_Vertices.size());
+	VertexBufferLayout vertexBufferLayout;
 
-Mesh::~Mesh()
-{
-	delete m_VertexArray;
-	delete m_IndexBuffer;
-}
+	vertexBufferLayout.Push<float>(3); // Position
+	vertexBufferLayout.Push<float>(3); // Normals
+	vertexBufferLayout.Push<float>(2); // Texture Coords
+	m_VertexArray.AddBuffer(vertexBuffer, vertexBufferLayout);}
 
 void Mesh::Draw(Shader& shader)
 {
@@ -35,23 +32,9 @@ void Mesh::Draw(Shader& shader)
 	}
 
 	GLCall(glActiveTexture(GL_TEXTURE0));
-	VertexArray va = (*m_VertexArray);
-	va.Bind();
+
+	m_VertexArray.Bind();
 	
-	va.Unbind();
+	m_VertexArray.Unbind();
 	
-}
-
-void Mesh::SetupMesh()
-{
-	VertexArray vertexArray;
-	VertexBuffer vertexBuffer(m_Vertices.data(), m_Vertices.size());
-	VertexBufferLayout vertexBufferLayout;
-
-	vertexBufferLayout.Push<float>(3); // Position
-	vertexBufferLayout.Push<float>(3); // Normals
-	vertexBufferLayout.Push<float>(2); // Texture Coords
-	vertexArray.AddBuffer(vertexBuffer, vertexBufferLayout);
-
-	m_IndexBuffer = new IndexBuffer(m_Indices.data(), m_Indices.size());
 }

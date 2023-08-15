@@ -124,7 +124,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mtd.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)OGLlib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\OpenGL Core\Model\Model.cpp" />
+    <ClCompile Include="src\OpenGL Core\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="include\glm\detail\glm.cpp" />
@@ -163,6 +165,8 @@
     <ClCompile Include="src\OpenGL Core\Textures\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\OpenGL Core\Model\Model.h" />
+    <ClInclude Include="src\OpenGL Core\Mesh\Mesh.h" />
     <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="include\glm\common.hpp" />
     <ClInclude Include="include\glm\detail\func_common.hpp" />
