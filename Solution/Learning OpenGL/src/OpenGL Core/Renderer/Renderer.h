@@ -8,6 +8,6 @@ class Renderer
 {
 public:
 	void Clear() const;
-	void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader);
+	static void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader);
 };
 

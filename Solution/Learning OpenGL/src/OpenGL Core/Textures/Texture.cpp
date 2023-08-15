@@ -4,7 +4,8 @@
 #include "../../vendor/stb_lib/stb_lib.h"
 #include <iostream>
 
-Texture::Texture(const char* pathName, TextureType type)
+Texture::Texture(const char* pathName, FileType fileType, TextureType textureType):
+	m_FileType(fileType), m_TextureType(textureType)
 {
 	GLCall(glGenTextures(1, &m_ID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_ID));
@@ -14,7 +15,7 @@ Texture::Texture(const char* pathName, TextureType type)
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-	unsigned int dataType = type == TextureType::JPG ? GL_RGB : GL_RGBA;
+	unsigned int dataType = fileType == FileType::JPG ? GL_RGB : GL_RGBA;
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(pathName, &width, &height, &nrChannels, 0);
 	if (data) {
@@ -30,6 +31,11 @@ Texture::Texture(const char* pathName, TextureType type)
 Texture::~Texture()
 {
 	GLCall(glDeleteTextures(1, &m_ID));
+}
+
+Texture::TextureType Texture::GetTextureType()
+{
+	return m_TextureType;
 }
 
 void Texture::Bind() const

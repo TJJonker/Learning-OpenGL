@@ -21,13 +21,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 Camera camera;
-Renderer renderer;
-
-struct Vertex {
-	glm::vec3 Position;
-	glm::vec3 Normal;
-	glm::vec3 TextureCoords;
-};
 
 int main() {
 	glfwInit(); // Initialize glfw
@@ -136,8 +129,8 @@ int main() {
 
 		IndexBuffer indexBuffer(indices, 36);
 
-		Texture diffuseMap("src/textures/container.png", Texture::TextureType::PNG);
-		Texture specularMap("src/textures/container_specular.png", Texture::TextureType::PNG);
+		Texture diffuseMap("src/textures/container.png", Texture::FileType::PNG, Texture::TextureType::DIFFUSE);
+		Texture specularMap("src/textures/container_specular.png", Texture::FileType::PNG, Texture::TextureType::SPECULAR);
 		glActiveTexture(GL_TEXTURE0);
 		diffuseMap.Bind();
 		glActiveTexture(GL_TEXTURE1);
@@ -213,9 +206,8 @@ int main() {
 				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 				shaderLit.SetMatrix4("model", model);
 
-				renderer.Draw(vertexArray, indexBuffer, shaderLit);
+				Renderer::Draw(vertexArray, indexBuffer, shaderLit);
 			}
-
 
 			lightSourceShader.Bind();
 			lightSourceShader.SetMatrix4("projection", projection);
@@ -225,7 +217,7 @@ int main() {
 				model = glm::translate(model, pointLightPositions[i]);
 				model = glm::scale(model, glm::vec3(0.2f));
 				lightSourceShader.SetMatrix4("model", model);
-				renderer.Draw(lightVertexArray, indexBuffer, lightSourceShader);
+				Renderer::Draw(lightVertexArray, indexBuffer, lightSourceShader);
 			}
 
 			// Check and call events and swap the buffers
