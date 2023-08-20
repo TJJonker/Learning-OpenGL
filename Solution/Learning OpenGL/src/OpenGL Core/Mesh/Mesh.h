@@ -8,6 +8,10 @@
 
 struct Vertex {
 	glm::vec3 Position;
+	glm::vec3 Normals;
+	glm::vec2 TextureCoords;
+	glm::vec3 Tangent;
+	glm::vec3 Bitangent;
 };
 
 class Mesh

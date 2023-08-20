@@ -36,14 +36,16 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 
 Mesh* Model::ProcessMesh(aiMesh* mesh) {
 
-    std::vector<Vertex> vertices = GetVertices(mesh);
+    std::vector<Vertex> vertices = GetVertexInformation(mesh);
     std::vector<unsigned int> indices = GetIndices(mesh);  
+    std::vector<Texture> textures = GetTextures(mesh)
+
         
     // Create a mesh with the collected Vertex structs.    
     return new Mesh(vertices, indices);
 }
 
-std::vector<Vertex> Model::GetVertices(aiMesh* mesh) {
+std::vector<Vertex> Model::GetVertexInformation(aiMesh* mesh) {
     std::vector<Vertex> vertices;
 
     // Process the mesh and collect the necessary data. 
@@ -55,6 +57,24 @@ std::vector<Vertex> Model::GetVertices(aiMesh* mesh) {
         aiVector3D pos = mesh->mVertices[i];
         vertex.Position = { pos.x, pos.y, pos.z };
 
+        // Process Vertex Normals
+        aiVector3D norm = mesh->mNormals[i];
+        vertex.Normals = { norm.x, norm.y, norm.z };
+        
+        if (mesh->mTextureCoords[0]) {
+            // Process Texture Coords
+            aiVector3D texco = mesh->mTextureCoords[0][i];
+            vertex.TextureCoords = { texco.x, texco.y };
+
+            aiVector3D tangent = mesh->mTangents[i];
+            vertex.Tangent = { tangent.x, tangent.y, tangent.z };
+
+            aiVector3D bitangent = mesh->mBitangents[i];
+            vertex.Bitangent = { bitangent.x, bitangent.y, bitangent.z };
+        }
+        else {
+            vertex.TextureCoords = { 0.0, 0.0 };
+        }
 
         // Place all the collected structs inside a vector.
         vertices.push_back(vertex);

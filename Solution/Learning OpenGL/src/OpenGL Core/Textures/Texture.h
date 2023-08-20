@@ -1,12 +1,9 @@
 #pragma once
 #include <string>
+#include <glad/glad.h>
 class Texture
 {
 public:
-	enum class FileType {
-		PNG,
-		JPG
-	};
 
 	enum class TextureType {
 		DIFFUSE,
@@ -15,10 +12,12 @@ public:
 
 private:
 	unsigned int m_ID;
-	FileType m_FileType;
 	TextureType m_TextureType;
+
+	GLenum GetDataFormat(int nrChannels) const;
+
 public:
-	Texture(const char* pathName, FileType fileType, TextureType textureType);
+	Texture(const std::string& path, const char* pathName, TextureType textureType);
 	~Texture();
 
 	TextureType GetTextureType();

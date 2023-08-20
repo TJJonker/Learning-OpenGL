@@ -11,7 +11,7 @@ private:
 
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh* ProcessMesh(aiMesh* mesh);
-	std::vector<Vertex> GetVertices(aiMesh* mesh);
+	std::vector<Vertex> GetVertexInformation(aiMesh* mesh);
 	std::vector<unsigned int> GetIndices(aiMesh* mesh);
 
 public:
