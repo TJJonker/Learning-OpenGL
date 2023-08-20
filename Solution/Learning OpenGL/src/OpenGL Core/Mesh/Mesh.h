@@ -8,8 +8,6 @@
 
 struct Vertex {
 	glm::vec3 Position;
-	glm::vec3 Normal;
-	glm::vec3 TextureCoords;
 };
 
 class Mesh
@@ -17,12 +15,9 @@ class Mesh
 private:
 	VertexArray m_VertexArray;
 	IndexBuffer m_IndexBuffer;
-	std::vector<Vertex>			m_Vertices;
-	std::vector<unsigned int>	m_Indices;
-	std::vector<Texture>		m_Textures;
 	
 public:
-	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures);
+	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 	void Draw(Shader& shader);
 };
 

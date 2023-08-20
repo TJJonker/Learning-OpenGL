@@ -6,10 +6,16 @@
 class Model
 {
 private:
-	std::vector<Mesh> m_Meshes;
+	std::vector<Mesh*> m_Meshes;
 	std::string m_Directory;
 
-	void LoadModel(std::string path);
 	void ProcessNode(aiNode* node, const aiScene* scene);
+	Mesh* ProcessMesh(aiMesh* mesh);
+	std::vector<Vertex> GetVertices(aiMesh* mesh);
+	std::vector<unsigned int> GetIndices(aiMesh* mesh);
+
+public:
+	Model(const std::string path);
+	void Draw(Shader& shader);
 };
 
