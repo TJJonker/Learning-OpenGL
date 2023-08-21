@@ -19,9 +19,11 @@ class Mesh
 private:
 	VertexArray m_VertexArray;
 	IndexBuffer m_IndexBuffer;
-	
+	std::vector<std::shared_ptr<Texture>> m_Textures;
+
+	std::string GetUniformName(Texture::TextureType textureType);
 public:
-	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<std::shared_ptr<Texture>>& textures);
 	void Draw(Shader& shader);
 };
 

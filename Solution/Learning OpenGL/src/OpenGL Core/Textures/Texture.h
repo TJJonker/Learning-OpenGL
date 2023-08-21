@@ -6,8 +6,10 @@ class Texture
 public:
 
 	enum class TextureType {
-		DIFFUSE,
-		SPECULAR
+		DIFFUSE = 0,
+		SPECULAR = 1,
+		NORMAL = 2,
+		HEIGHT = 3
 	};
 
 private:

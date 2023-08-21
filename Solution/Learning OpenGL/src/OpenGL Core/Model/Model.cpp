@@ -25,7 +25,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 {
     // Iterate over current Node's meshes and process the meshes
     for (unsigned int i = 0; i < node->mNumMeshes; ++i) {
-        m_Meshes.push_back(ProcessMesh(scene->mMeshes[node->mMeshes[i]]));
+        m_Meshes.push_back(ProcessMesh(scene->mMeshes[node->mMeshes[i]], scene));
     }
 
     // Check if the current Node has more child Nodes and recursively call this function.
@@ -34,15 +34,15 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     }
 }
 
-Mesh* Model::ProcessMesh(aiMesh* mesh) {
+Mesh* Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     std::vector<Vertex> vertices = GetVertexInformation(mesh);
-    std::vector<unsigned int> indices = GetIndices(mesh);  
-    std::vector<Texture> textures = GetTextures(mesh)
+    std::vector<unsigned int> indices = GetIndices(mesh);
+    std::vector<std::shared_ptr<Texture>> textures = GetTextures(mesh, scene);
 
         
     // Create a mesh with the collected Vertex structs.    
-    return new Mesh(vertices, indices);
+    return new Mesh(vertices, indices, textures);
 }
 
 std::vector<Vertex> Model::GetVertexInformation(aiMesh* mesh) {
@@ -94,6 +94,49 @@ std::vector<unsigned int> Model::GetIndices(aiMesh* mesh) {
     }
 
     return indices;
+}
+
+std::vector<std::shared_ptr<Texture>> Model::GetTextures(aiMesh* mesh, const aiScene* scene)
+{
+    std::vector<std::shared_ptr<Texture>> textures;
+    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+    LoadAndInsertTextures(textures, material, aiTextureType_DIFFUSE, Texture::TextureType::DIFFUSE);
+    LoadAndInsertTextures(textures, material, aiTextureType_SPECULAR, Texture::TextureType::SPECULAR);
+    LoadAndInsertTextures(textures, material, aiTextureType_NORMALS, Texture::TextureType::NORMAL);
+    LoadAndInsertTextures(textures, material, aiTextureType_HEIGHT, Texture::TextureType::HEIGHT);
+
+    return textures;
+}
+
+void Model::LoadAndInsertTextures(std::vector<std::shared_ptr<Texture>>& textures, aiMaterial* material, aiTextureType aiType, Texture::TextureType textureType)
+{
+    std::vector<std::shared_ptr<Texture>> textureMaps = LoadMaterialTextures(material, aiType, textureType);
+    textures.insert(textures.end(), textureMaps.begin(), textureMaps.end());
+}
+
+std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType aiType, Texture::TextureType textureType)
+{
+    std::vector<std::shared_ptr<Texture>> textures;
+
+    for (unsigned int i = 0; i < mat->GetTextureCount(aiType); ++i) {
+        aiString path;
+        mat->GetTexture(aiType, i, &path);
+
+        // If the texture already exists in the list.
+        if (m_LoadedTextures.find(path.C_Str()) != m_LoadedTextures.end()) {
+            textures.push_back(m_LoadedTextures[path.C_Str()]);
+            std::cout << "Texure Already Loaded!" << std::endl << std::endl;
+            continue;
+        }
+
+        std::shared_ptr<Texture> texture = std::make_shared<Texture>(m_Directory, path.C_Str(), textureType); 
+        m_LoadedTextures.insert({ path.C_Str(), texture});
+        textures.push_back(texture);
+        std::cout << "Texture not loaded yet..." << std::endl << std::endl;
+    }
+
+    return textures;
 }
 
 void Model::Draw(Shader& shader)

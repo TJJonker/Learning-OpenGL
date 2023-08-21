@@ -435,6 +435,8 @@
     <None Include="include\glm\gtx\vector_angle.inl" />
     <None Include="include\glm\gtx\vector_query.inl" />
     <None Include="include\glm\gtx\wrap.inl" />
+    <None Include="src\shaders\backpackFragment.glsl" />
+    <None Include="src\shaders\backpackVertex.glsl" />
     <None Include="src\shaders\fragmentShaderLighting.glsl" />
     <None Include="src\shaders\fragmentShaderLight.glsl" />
     <None Include="src\shaders\vertexShaderLight.glsl" />

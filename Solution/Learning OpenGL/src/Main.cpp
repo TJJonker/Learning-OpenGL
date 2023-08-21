@@ -137,9 +137,11 @@ int main() {
 		//glActiveTexture(GL_TEXTURE1);
 		//specularMap.Bind();
 
-		Shader shaderLit("src/shaders/vertexShaderLight.glsl", "src/shaders/fragmentShaderLight.glsl");
+		Shader shaderLit("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
 
-		Model dModel("C:/Users/Tom/Downloads/cube/cube.obj");
+		//Model dModel("C:/Users/Tom/Downloads/cube/cube.obj");
+		Model dModel("C:/Users/Tom/Downloads/backpack/backpack.obj");
+
 
 		//////// Light source
 
@@ -155,9 +157,9 @@ int main() {
 		//	glm::vec3(0.0f,  0.0f, -3.0f)
 		//};
 
-
+		stbi_set_flip_vertically_on_load(true); 
 		GLCall(glEnable(GL_DEPTH_TEST));
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		// Render loop
 		while (!glfwWindowShouldClose(window)) {
@@ -169,7 +171,6 @@ int main() {
 			// Render instructions
 			GLCall(glClearColor(0.1f, 0.1f, 0.125f, 1.0f));
 			GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
 			
 
 			shaderLit.Bind();
@@ -208,6 +209,7 @@ int main() {
 				//model = glm::translate(model, positions[i]);
 			//	float angle = 13 * i;
 				//model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+				//model = glm::scale(model, glm::vec3(0.0025));
 				shaderLit.SetMatrix4("model", model);
 
 				dModel.Draw(shaderLit);
