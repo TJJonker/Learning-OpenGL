@@ -14,3 +14,8 @@ void Time::Update()
     m_DeltaTime = glfwGetTime() - m_LastFrameTimestamp;
     m_LastFrameTimestamp = glfwGetTime();
 }
+
+float Time::TimeSinceStartup()
+{
+    return glfwGetTime();
+}

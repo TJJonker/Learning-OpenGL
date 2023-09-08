@@ -13,6 +13,8 @@ uniform mat4 projection;
 out vec2 TextureCoords;
 
 void main(){
-	gl_Position = projection * view * model * vec4(aPos, 1.0);
 	TextureCoords = aTextureCoords;	
+	
+
+	gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

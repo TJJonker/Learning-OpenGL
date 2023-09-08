@@ -26,6 +26,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 Camera camera;
 
+float rotationSpeed = 10;
+
 int main() {
 	glfwInit(); // Initialize glfw
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // Set major and minor version so it matches version 3.3
@@ -94,12 +96,14 @@ int main() {
 
 
 			glm::mat4 model = glm::mat4(1.0f);
+			float angle = Time::TimeSinceStartup() * rotationSpeed;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(0.f, 1.f, 0.f));
 			shaderLit.SetMatrix4("model", model);
 
 			dModel.Draw(shaderLit);
 
 			ImGui::Begin("Wow, a new window, fucking awesome");
-			ImGui::Button("Press me daddy");
+			ImGui::InputFloat("Rotation speed", &rotationSpeed);
 			ImGui::End();
 
 			ImGui::Render();

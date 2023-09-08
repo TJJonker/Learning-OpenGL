@@ -8,4 +8,5 @@ private:
 public:
 	static float DeltaTime();
 	static void Update();
+	static float TimeSinceStartup();
 };
