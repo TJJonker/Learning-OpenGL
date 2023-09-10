@@ -27,6 +27,10 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 Camera camera;
 
 float rotationSpeed = 10;
+glm::vec3 lightDirection = { -0.6f, 0.f, -1.f };
+glm::vec3 ambientColor = { .1f, .1f, .1f };
+glm::vec3 diffuseColor = { .5f, .5f, .5f };
+glm::vec3 specularColor = { 1.f, 1.f, 1.f };
 
 int main() {
 	glfwInit(); // Initialize glfw
@@ -57,6 +61,7 @@ int main() {
 
 	{
 		Shader shaderLit("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
+		//Shader shaderLit("src/shaders/vertexShaderLight.glsl", "src/shaders/fragmentShaderLight.glsl");
 
 		Model dModel("C:/Users/Tom/Downloads/backpack/backpack.obj");
 
@@ -70,6 +75,8 @@ int main() {
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
+
+
 
 		// Render loop
 		while (!glfwWindowShouldClose(window)) {
@@ -94,6 +101,12 @@ int main() {
 			shaderLit.SetMatrix4("projection", projection);
 			shaderLit.SetMatrix4("view", viewMatrix);
 
+			shaderLit.Set3f("directionalLight.direction", lightDirection);
+			shaderLit.Set3f("directionalLight.ambient", ambientColor);
+			shaderLit.Set3f("directionalLight.diffuse", diffuseColor);
+			shaderLit.Set3f("directionalLight.specular", specularColor);
+			shaderLit.SetFloat("shininess", 32);
+			shaderLit.Set3f("viewPosition", camera.GetPosition());
 
 			glm::mat4 model = glm::mat4(1.0f);
 			float angle = Time::TimeSinceStartup() * rotationSpeed;
@@ -104,6 +117,10 @@ int main() {
 
 			ImGui::Begin("Wow, a new window, fucking awesome");
 			ImGui::InputFloat("Rotation speed", &rotationSpeed);
+			ImGui::InputFloat3("Light direction", (float*) & lightDirection);
+			ImGui::ColorEdit3("Ambient color", (float*)&ambientColor);
+			ImGui::ColorEdit3("Diffuse color", (float*)&diffuseColor);
+			ImGui::ColorEdit3("Specular color", (float*)&specularColor);
 			ImGui::End();
 
 			ImGui::Render();

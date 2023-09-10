@@ -38,8 +38,7 @@ void Mesh::Draw(Shader& shader)
 	}
 
 	Renderer::Draw(m_VertexArray, m_IndexBuffer, shader);
-	m_VertexArray.Unbind();
-	
+	m_VertexArray.Unbind();	
 }
 
 std::string Mesh::GetUniformName(Texture::TextureType textureType)
