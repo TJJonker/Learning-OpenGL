@@ -26,7 +26,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 Camera camera;
 
-float rotationSpeed = 10;
+float rotationSpeed = 38;
 glm::vec3 lightDirection = { -0.6f, 0.f, -1.f };
 glm::vec3 ambientColor = { .1f, .1f, .1f };
 glm::vec3 diffuseColor = { .5f, .5f, .5f };
@@ -60,10 +60,14 @@ int main() {
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	{
-		Shader shaderLit("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
-		//Shader shaderLit("src/shaders/vertexShaderLight.glsl", "src/shaders/fragmentShaderLight.glsl");
+		//Shader dShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
+		//Shader eShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
+		
+		Shader dShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
+		Shader eShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
 
-		Model dModel("C:/Users/Tom/Downloads/backpack/backpack.obj");
+		Model dModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Bld_03_Dark.obj");
+		Model eModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Prop_Chinatown_Entrance.obj");
 
 		stbi_set_flip_vertically_on_load(true); 
 		GLCall(glEnable(GL_DEPTH_TEST));
@@ -93,27 +97,62 @@ int main() {
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 			
+			{
+				// Skyscraper entrance
+				dShader.Bind();
 
-			shaderLit.Bind();
+				glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
+				glm::mat4 viewMatrix = camera.GetView();
+				dShader.SetMatrix4("projection", projection);
+				dShader.SetMatrix4("view", viewMatrix);
 
-			glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
-			glm::mat4 viewMatrix = camera.GetView();
-			shaderLit.SetMatrix4("projection", projection);
-			shaderLit.SetMatrix4("view", viewMatrix);
+				dShader.Set3f("directionalLight.direction", lightDirection);
+				dShader.Set3f("directionalLight.ambient", ambientColor);
+				dShader.Set3f("directionalLight.diffuse", diffuseColor);
+				dShader.Set3f("directionalLight.specular", specularColor);
+				dShader.SetFloat("shininess", 32);
+				dShader.Set3f("viewPosition", camera.GetPosition());
 
-			shaderLit.Set3f("directionalLight.direction", lightDirection);
-			shaderLit.Set3f("directionalLight.ambient", ambientColor);
-			shaderLit.Set3f("directionalLight.diffuse", diffuseColor);
-			shaderLit.Set3f("directionalLight.specular", specularColor);
-			shaderLit.SetFloat("shininess", 32);
-			shaderLit.Set3f("viewPosition", camera.GetPosition());
+				glm::mat4 model = glm::mat4(1.0f);
+				float angle = rotationSpeed;
+				//float angle = Time::TimeSinceStartup() * rotationSpeed;
+				model = glm::translate(model, glm::vec3(3.f, -2.f, -5.f));
+				model = glm::scale(model, glm::vec3(.05f, .05f, .05f));
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(0.f, 1.f, 0.f));
+				dShader.SetMatrix4("model", model);
 
-			glm::mat4 model = glm::mat4(1.0f);
-			float angle = Time::TimeSinceStartup() * rotationSpeed;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(0.f, 1.f, 0.f));
-			shaderLit.SetMatrix4("model", model);
+				dModel.Draw(dShader);
+			}
 
-			dModel.Draw(shaderLit);
+
+			{
+				// China town entrance
+				eShader.Bind();
+
+				glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
+				glm::mat4 viewMatrix = camera.GetView();
+				eShader.SetMatrix4("projection", projection);
+				eShader.SetMatrix4("view", viewMatrix);
+
+				eShader.Set3f("directionalLight.direction", lightDirection);
+				eShader.Set3f("directionalLight.ambient", ambientColor);
+				eShader.Set3f("directionalLight.diffuse", diffuseColor);
+				eShader.Set3f("directionalLight.specular", specularColor);
+				eShader.SetFloat("shininess", 32);
+				eShader.Set3f("viewPosition", camera.GetPosition());
+
+				glm::mat4 model = glm::mat4(1.0f);
+				float angle = rotationSpeed*2;
+				//float angle = Time::TimeSinceStartup() * rotationSpeed;
+				model = glm::translate(model, glm::vec3(0.f, -0.25f, 7.25f));
+				model = glm::scale(model, glm::vec3(.025f, .025f, .025f));
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(0.f, 1.f, 0.f));
+				eShader.SetMatrix4("model", model);
+
+				eModel.Draw(eShader);
+			}
+
+
 
 			ImGui::Begin("Wow, a new window, fucking awesome");
 			ImGui::InputFloat("Rotation speed", &rotationSpeed);

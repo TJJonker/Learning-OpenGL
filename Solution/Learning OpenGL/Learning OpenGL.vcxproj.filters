@@ -925,6 +925,8 @@
     <None Include="src\shaders\vertexShaderLighting.glsl" />
     <None Include="src\shaders\backpackFragment.glsl" />
     <None Include="src\shaders\backpackVertex.glsl" />
+    <None Include="src\shaders\Depth_Testing\DepthFragment.glsl" />
+    <None Include="src\shaders\Depth_Testing\DepthVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\textures\texture.png">

@@ -32,7 +32,8 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir
     vec3 ambientResult = light.ambient * vec3(texture(texture_diffuse1, TextureCoords));
 
     float diffuse = max(dot(normal, lightDirection), 0.0);
-    vec3 diffuseResult = light.diffuse * diffuse * vec3(texture(texture_diffuse1, TextureCoords));
+    //vec3 diffuseResult = light.diffuse * diffuse * vec3(texture(texture_diffuse1, TextureCoords));
+    vec3 diffuseResult = light.diffuse * diffuse * vec3(1.f);
     
     float specular = pow(max(dot(viewDirection, reflectDirection), 0.0), shininess);
     vec3 specularResult = light.specular * specular * vec3(texture(texture_specular1, TextureCoords));
