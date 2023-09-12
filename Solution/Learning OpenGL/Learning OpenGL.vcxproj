@@ -457,6 +457,8 @@
     <None Include="src\shaders\Depth_Testing\DepthVertex.glsl" />
     <None Include="src\shaders\fragmentShaderLighting.glsl" />
     <None Include="src\shaders\fragmentShaderLight.glsl" />
+    <None Include="src\shaders\Stencil_Testing\SingleColorFragment.glsl" />
+    <None Include="src\shaders\Stencil_Testing\SingleColorVertex.glsl" />
     <None Include="src\shaders\vertexShaderLight.glsl" />
     <None Include="src\shaders\vertexShaderLighting.glsl" />
   </ItemGroup>

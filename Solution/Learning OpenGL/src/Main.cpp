@@ -60,17 +60,20 @@ int main() {
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	{
-		//Shader dShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
-		//Shader eShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
+		Shader dShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
+		Shader eShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
+		Shader oShader("src/shaders/Stencil_Testing/SingleColorVertex.glsl", "src/shaders/Stencil_Testing/SingleColorFragment.glsl");
 		
-		Shader dShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
-		Shader eShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
+		//Shader dShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
+		//Shader eShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
 
 		Model dModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Bld_03_Dark.obj");
 		Model eModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Prop_Chinatown_Entrance.obj");
 
 		stbi_set_flip_vertically_on_load(true); 
 		GLCall(glEnable(GL_DEPTH_TEST));
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		IMGUI_CHECKVERSION();
@@ -80,9 +83,7 @@ int main() {
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 
-
-
-		// Render loop
+		// Render loop	
 		while (!glfwWindowShouldClose(window)) {
 			// Inputs
 			processInput(window);
@@ -91,16 +92,48 @@ int main() {
 
 			// Render instructions
 			GLCall(glClearColor(0.1f, 0.1f, 0.125f, 1.0f));
-			GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+			GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
+
+
+			{
+				glStencilMask(0x00);
+				// China town entrance
+				eShader.Bind();
+
+				glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
+				glm::mat4 viewMatrix = camera.GetView();
+				eShader.SetMatrix4("projection", projection);
+				eShader.SetMatrix4("view", viewMatrix);
+
+				eShader.Set3f("directionalLight.direction", lightDirection);
+				eShader.Set3f("directionalLight.ambient", ambientColor);
+				eShader.Set3f("directionalLight.diffuse", diffuseColor);
+				eShader.Set3f("directionalLight.specular", specularColor);
+				eShader.SetFloat("shininess", 32);
+				eShader.Set3f("viewPosition", camera.GetPosition());
+
+				glm::mat4 model = glm::mat4(1.0f);
+				float angle = rotationSpeed * 2;
+				//float angle = Time::TimeSinceStartup() * rotationSpeed;
+				model = glm::translate(model, glm::vec3(0.f, -0.25f, 7.25f));
+				model = glm::scale(model, glm::vec3(.025f, .025f, .025f));
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(0.f, 1.f, 0.f));
+				eShader.SetMatrix4("model", model);
+
+				eModel.Draw(eShader);
+			}
 			
 			{
-				// Skyscraper entrance
-				dShader.Bind();
+				glStencilFunc(GL_ALWAYS, 1, 0xFF);
+				glStencilMask(0xFF);
 
+				// Skyscraper 
+				dShader.Bind();
+				
 				glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
 				glm::mat4 viewMatrix = camera.GetView();
 				dShader.SetMatrix4("projection", projection);
@@ -124,35 +157,41 @@ int main() {
 				dModel.Draw(dShader);
 			}
 
-
+			// Draw Skyscraper outline
 			{
-				// China town entrance
-				eShader.Bind();
+				glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+				glStencilMask(0x00);
+				glDisable(GL_DEPTH_TEST);
+
+				// Skyscraper 
+				oShader.Bind();
 
 				glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
 				glm::mat4 viewMatrix = camera.GetView();
-				eShader.SetMatrix4("projection", projection);
-				eShader.SetMatrix4("view", viewMatrix);
+				oShader.SetMatrix4("projection", projection);
+				oShader.SetMatrix4("view", viewMatrix);
 
-				eShader.Set3f("directionalLight.direction", lightDirection);
-				eShader.Set3f("directionalLight.ambient", ambientColor);
-				eShader.Set3f("directionalLight.diffuse", diffuseColor);
-				eShader.Set3f("directionalLight.specular", specularColor);
-				eShader.SetFloat("shininess", 32);
-				eShader.Set3f("viewPosition", camera.GetPosition());
+				oShader.Set3f("directionalLight.direction", lightDirection);
+				oShader.Set3f("directionalLight.ambient", ambientColor);
+				oShader.Set3f("directionalLight.diffuse", diffuseColor);
+				oShader.Set3f("directionalLight.specular", specularColor);
+				oShader.SetFloat("shininess", 32);
+				oShader.Set3f("viewPosition", camera.GetPosition());
 
 				glm::mat4 model = glm::mat4(1.0f);
-				float angle = rotationSpeed*2;
+				float angle = rotationSpeed;
 				//float angle = Time::TimeSinceStartup() * rotationSpeed;
-				model = glm::translate(model, glm::vec3(0.f, -0.25f, 7.25f));
-				model = glm::scale(model, glm::vec3(.025f, .025f, .025f));
+				model = glm::translate(model, glm::vec3(3.f, -2.f, -5.f));
+				model = glm::scale(model, glm::vec3(.051f, .051f, .051f));
 				model = glm::rotate(model, glm::radians(angle), glm::vec3(0.f, 1.f, 0.f));
-				eShader.SetMatrix4("model", model);
+				oShader.SetMatrix4("model", model);
 
-				eModel.Draw(eShader);
+				dModel.Draw(oShader);
 			}
 
-
+			glStencilFunc(GL_ALWAYS, 1, 0xFF);
+			glStencilMask(0xFF);
+			glEnable(GL_DEPTH_TEST);
 
 			ImGui::Begin("Wow, a new window, fucking awesome");
 			ImGui::InputFloat("Rotation speed", &rotationSpeed);
