@@ -170,6 +170,7 @@
     <ClCompile Include="src\OpenGL Core\VertexArray\VertexArray.cpp" />
     <ClCompile Include="src\OpenGL Core\VertexBuffer\VertexBuffer.cpp" />
     <ClCompile Include="src\OpenGL Core\Textures\Texture.cpp" />
+    <ClCompile Include="src\OpenGL Core\TexurePlane\TexturePlane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\OpenGL Core\Model\Model.h" />
@@ -338,6 +339,7 @@
     <ClInclude Include="src\OpenGL Core\VertexArray\VertexArray.h" />
     <ClInclude Include="src\OpenGL Core\VertexBuffer\VertexBuffer.h" />
     <ClInclude Include="src\OpenGL Core\Textures\Texture.h" />
+    <ClInclude Include="src\OpenGL Core\TexurePlane\TexturePlane.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\glm\detail\func_common.inl" />
@@ -457,6 +459,8 @@
     <None Include="src\shaders\Depth_Testing\DepthVertex.glsl" />
     <None Include="src\shaders\fragmentShaderLighting.glsl" />
     <None Include="src\shaders\fragmentShaderLight.glsl" />
+    <None Include="src\shaders\GrassShader\GrassFragmentShader.glsl" />
+    <None Include="src\shaders\GrassShader\GrassVertexShader.glsl" />
     <None Include="src\shaders\Stencil_Testing\SingleColorFragment.glsl" />
     <None Include="src\shaders\Stencil_Testing\SingleColorVertex.glsl" />
     <None Include="src\shaders\vertexShaderLight.glsl" />
@@ -467,7 +471,9 @@
     <Image Include="src\textures\container.jpg" />
     <Image Include="src\textures\container.png" />
     <Image Include="src\textures\container_specular.png" />
+    <Image Include="src\textures\grass.png" />
     <Image Include="src\textures\lighting_maps_specular_color.png" />
+    <Image Include="src\textures\Picture1.png" />
     <Image Include="src\textures\texture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -84,6 +84,9 @@
     <ClCompile Include="src\vendor\DearImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\OpenGL Core\TexurePlane\TexturePlane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debugging\debugger.h">
@@ -584,6 +587,9 @@
     <ClInclude Include="src\vendor\DearImGui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\OpenGL Core\TexurePlane\TexturePlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\vertexShaderLight.glsl" />
@@ -929,6 +935,8 @@
     <None Include="src\shaders\Depth_Testing\DepthVertex.glsl" />
     <None Include="src\shaders\Stencil_Testing\SingleColorFragment.glsl" />
     <None Include="src\shaders\Stencil_Testing\SingleColorVertex.glsl" />
+    <None Include="src\shaders\GrassShader\GrassFragmentShader.glsl" />
+    <None Include="src\shaders\GrassShader\GrassVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\textures\texture.png">
@@ -947,6 +955,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\textures\lighting_maps_specular_color.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\textures\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\textures\Picture1.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

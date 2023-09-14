@@ -126,7 +126,7 @@ std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* ma
         // If the texture already exists in the list.
         if (m_LoadedTextures.find(path.C_Str()) != m_LoadedTextures.end()) {
             textures.push_back(m_LoadedTextures[path.C_Str()]);
-            std::cout << "Texure Already Loaded!" << std::endl << std::endl;
+            std::cout << "Texture Already Loaded!" << std::endl << std::endl;
             continue;
         }
 
