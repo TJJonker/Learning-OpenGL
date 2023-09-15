@@ -9,9 +9,8 @@ in vec3 FragPosition;
 uniform sampler2D texture_diffuse1;
 
 void main(){
-	//FragColor = texture(texture_diffuse1, TextureCoords);
 	vec4 textureColor = texture(texture_diffuse1, TextureCoords);
-	if(textureColor.a < 0.1)
+	if(textureColor.a <= 0.1)
 		discard;
 	FragColor = textureColor;
 }

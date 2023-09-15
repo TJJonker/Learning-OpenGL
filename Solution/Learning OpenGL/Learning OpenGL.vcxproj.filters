@@ -935,8 +935,10 @@
     <None Include="src\shaders\Depth_Testing\DepthVertex.glsl" />
     <None Include="src\shaders\Stencil_Testing\SingleColorFragment.glsl" />
     <None Include="src\shaders\Stencil_Testing\SingleColorVertex.glsl" />
-    <None Include="src\shaders\GrassShader\GrassFragmentShader.glsl" />
-    <None Include="src\shaders\GrassShader\GrassVertexShader.glsl" />
+    <None Include="src\shaders\Transparent\TransparentFS.glsl" />
+    <None Include="src\shaders\Transparent\TransparentVS.glsl" />
+    <None Include="src\shaders\Blending\BlendingFS.glsl" />
+    <None Include="src\shaders\Blending\BlendingVS.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\textures\texture.png">
@@ -961,6 +963,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\textures\Picture1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\textures\window.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

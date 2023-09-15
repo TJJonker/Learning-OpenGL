@@ -68,29 +68,37 @@ int main() {
 		glm::vec3(0.5f, 0.0f, -0.6f)
 	};
 
+	std::vector<glm::vec3> windowLocations{
+		glm::vec3(-2.0f, 0.0f, -1.0f),
+		glm::vec3(2.5f, 0.0f, 1.2f),
+		glm::vec3(0.8f, 0.0f, -2.5f),
+		glm::vec3(-1.3f, 0.0f, 0.5f),
+		glm::vec3(1.7f, 0.0f, -0.8f)
+	};
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	{
-		Shader dShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
-		Shader eShader("src/shaders/backpackVertex.glsl", "src/shaders/backpackFragment.glsl");
-		Shader oShader("src/shaders/Stencil_Testing/SingleColorVertex.glsl", "src/shaders/Stencil_Testing/SingleColorFragment.glsl");
-		Shader gShader("src/shaders/GrassShader/GrassVertexShader.glsl", "src/shaders/GrassShader/GrassFragmentShader.glsl");
+		Shader TransparentShader("src/shaders/Transparent/TransparentVS.glsl", "src/shaders/Transparent/TransparentFS.glsl");
+		Shader BlendingShader("src/shaders/Blending/BlendingVS.glsl", "src/shaders/Blending/BlendingFS.glsl");
 		
-		//Shader dShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
-		//Shader eShader("src/shaders/Depth_Testing/DepthVertex.glsl", "src/shaders/Depth_Testing/DepthFragment.glsl");
-
-		Model dModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Bld_03_Dark.obj");
-		Model eModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Prop_Chinatown_Entrance.obj");
+		//Model dModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Bld_03_Dark.obj");
+		//Model eModel("C:/Users/Tom/Downloads/Simple_City_SourceFiles/SourceFiles/Combined/SC_Prop_Chinatown_Entrance.obj");
 
 		Texture planeTexture("src/textures/", "grass.png", Texture::TextureType::DIFFUSE);
 		std::shared_ptr<Texture> sharedPlaneTexture = std::make_shared<Texture>(planeTexture);
 		TexturePlane plane(sharedPlaneTexture);
 
+		Texture windowTexture("src/textures/", "window.png", Texture::TextureType::DIFFUSE);
+		std::shared_ptr<Texture> sharedWindowTexture = std::make_shared<Texture>(windowTexture);
+		TexturePlane windowPlane(sharedWindowTexture);
+
 		stbi_set_flip_vertically_on_load(true); 
 		GLCall(glEnable(GL_DEPTH_TEST));
+		GLCall(glEnable(GL_BLEND));
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+		
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -114,21 +122,46 @@ int main() {
 			ImGui::NewFrame();
 
 			{
-				gShader.Bind();
+				TransparentShader.Bind();
 
 			 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
-				gShader.SetMatrix4("projection", projection);
+				TransparentShader.SetMatrix4("projection", projection);
 				
 				glm::mat4 viewMatrix = camera.GetView();
-				gShader.SetMatrix4("view", viewMatrix);
+				TransparentShader.SetMatrix4("view", viewMatrix);
 
 				glm::mat4 model = glm::mat4(1.0f);
 				for (unsigned int i = 0; i < vegetation.size(); ++i) {
 
 					glm::mat4 nModel = glm::translate(model, vegetation[i]);
-					gShader.SetMatrix4("model", nModel);
+					TransparentShader.SetMatrix4("model", nModel);
 
-					plane.Draw(gShader);
+					plane.Draw(TransparentShader);
+				}
+			}
+
+			std::map<float, glm::vec3> sortedWindows;
+			for (unsigned int i = 0; i < windowLocations.size(); ++i) {
+				float distance = glm::length(camera.GetPosition() - windowLocations[i]);
+				sortedWindows[distance] = windowLocations[i];
+			}
+
+			{
+				BlendingShader.Bind();
+
+				glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 1000.0f / 1000.0f, 0.1f, 100.0f);
+				BlendingShader.SetMatrix4("projection", projection);
+				 
+				glm::mat4 viewMatrix = camera.GetView(); 
+				BlendingShader.SetMatrix4("view", viewMatrix);
+
+				glm::mat4 model = glm::mat4(1.0f); 
+				for (std::map<float, glm::vec3>::reverse_iterator it = sortedWindows.rbegin(); it != sortedWindows.rend(); ++it) {
+
+					glm::mat4 nModel = glm::translate(model, it->second);
+					BlendingShader.SetMatrix4("model", nModel);
+
+					windowPlane.Draw(BlendingShader);
 				}
 			}
 
