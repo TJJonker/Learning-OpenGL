@@ -26,6 +26,22 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, st
 
 void Mesh::Draw(Shader& shader)
 {	
+	BindTextures(shader);
+
+	Renderer::Draw(m_VertexArray, m_IndexBuffer, shader);
+	m_VertexArray.Unbind();	
+}
+
+void Mesh::DrawInstanced(Shader& shader, int instancedAmount)
+{
+	BindTextures(shader);
+
+	Renderer::DrawInstanced(m_VertexArray, m_IndexBuffer, shader, instancedAmount);
+	m_VertexArray.Unbind();
+}
+
+void Mesh::BindTextures(Shader& shader)
+{
 	std::vector<int> textureIndex = { 0, 0, 0, 0 };
 
 	for (unsigned int i = 0; i < m_Textures.size(); ++i) {
@@ -36,9 +52,6 @@ void Mesh::Draw(Shader& shader)
 		shader.SetInt(GetUniformName(type) + std::to_string(texIndex), i);
 		(*m_Textures[i]).Bind();
 	}
-
-	Renderer::Draw(m_VertexArray, m_IndexBuffer, shader);
-	m_VertexArray.Unbind();	
 }
 
 std::string Mesh::GetUniformName(Texture::TextureType textureType)
@@ -61,3 +74,4 @@ std::string Mesh::GetUniformName(Texture::TextureType textureType)
 		break;
 	}
 }
+

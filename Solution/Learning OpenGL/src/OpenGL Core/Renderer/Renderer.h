@@ -9,5 +9,6 @@ class Renderer
 public:
 	void Clear() const;
 	static void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader);
+	static void DrawInstanced(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader, int instancedAmount);
 };
 

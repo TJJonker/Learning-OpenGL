@@ -22,8 +22,10 @@ private:
 	std::vector<std::shared_ptr<Texture>> m_Textures;
 
 	std::string GetUniformName(Texture::TextureType textureType);
+	void BindTextures(Shader& shader);
 public:
 	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<std::shared_ptr<Texture>>& textures);
 	void Draw(Shader& shader);
+	void DrawInstanced(Shader& shader, int instancedAmount);
 };
 

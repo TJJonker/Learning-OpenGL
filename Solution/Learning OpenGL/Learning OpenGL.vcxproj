@@ -461,6 +461,8 @@
     <None Include="src\shaders\Depth_Testing\DepthVertex.glsl" />
     <None Include="src\shaders\fragmentShaderLighting.glsl" />
     <None Include="src\shaders\fragmentShaderLight.glsl" />
+    <None Include="src\shaders\Instancing_Testing\InstancingFS.glsl" />
+    <None Include="src\shaders\Instancing_Testing\InstancingVS.glsl" />
     <None Include="src\shaders\Transparent\TransparentFS.glsl" />
     <None Include="src\shaders\Transparent\TransparentVS.glsl" />
     <None Include="src\shaders\Stencil_Testing\SingleColorFragment.glsl" />
